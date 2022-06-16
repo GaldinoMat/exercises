@@ -4,6 +4,8 @@
 // Documentação
 // https://rickandmortyapi.com/documentation/#rest
 
+const { default: axios } = require("axios");
+
 // Ex de Saida: [
 //   {
 //     nome: 'Rick Sanchez',
@@ -38,7 +40,34 @@
 // ]
 
 async function getRicAndMortyCharacters() {
-  //you code here...
+  const {data: smithData} = await axios({
+    method: 'get',
+    url: 'https://rickandmortyapi.com/api/character/?name=smith&status=alive&species=Human',
+  })
+
+  const {data: rickData} = await axios({
+    method: 'get',
+    url: 'https://rickandmortyapi.com/api/character/?name=rick&status=alive&species=Human',
+  })
+
+  const smithFamily = smithData.results.slice(0, 4).map(member => getCharacterData(member))
+
+  const rick = rickData.results.shift()
+
+  smithFamily.unshift(getCharacterData(rick))
+
+  return smithFamily
 }
+
+const getCharacterData = (character) => {
+  return {
+    nome: character.name,
+    genero: character.gender === "Male" ? "Homem" : "Mulher",
+    avatar: character.image,
+    especie: character.species === "Human" ? "Humano" : ""
+  }
+}
+
+getRicAndMortyCharacters()
 
 module.exports = getRicAndMortyCharacters;

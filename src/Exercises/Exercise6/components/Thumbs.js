@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react'
 
-function Thumbs({ items, currentIndex }) {
+function Thumbs({ items, currentIndex, handleThumbnailClick }) {
 
   return (
     <Fragment>
       {
         items.map((catalog, idx) => (
           <span
+            onClick={() => handleThumbnailClick(items.indexOf(catalog))}
             id={idx}
             key={idx}
             data-testid={'thumb-button-' + idx}
